@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient ,HttpHeaders, HttpParams,} from "@angular/common/http";
-
+import { environment } from '../../environments/environment';
+import { JwtHelperService } from '@auth0/angular-jwt';
+const helper = new JwtHelperService();
 @Injectable({
   providedIn: 'root'
 })
-export class ServicioexpoService {
 
+export class ServicioexpoService {
   constructor(private http: HttpClient) { }
   validarrecaptcha(tokenrecaptch :string){
     const params= new HttpParams();
@@ -26,5 +28,41 @@ export class ServicioexpoService {
       }
      );
     })
+  }
+  login(data:any){
+    return new Promise((resolve, reject) => {
+      this.http.post(environment.Api_Url +'Usuarios/authenticate',data).subscribe(
+        (res) => {
+          resolve(res);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+  CheckToken():void {
+    
+    const UserToken= localStorage.getItem('Token');
+    const IsExpired=helper.isTokenExpired(UserToken);
+    if(IsExpired){
+        localStorage.removeItem('Token');            
+    }
+  }
+
+  ObtenerValores(){
+    const token= localStorage.getItem('Token');
+    let headers= new HttpHeaders();
+    headers= headers.append('Authorization','bearer '+token);
+    return new Promise((resolve, reject) => {
+      this.http.get(environment.Api_Url +'Usuarios',{headers:headers}).subscribe(
+        (res) => {
+          resolve(res);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
   }
 }

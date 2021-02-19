@@ -342,13 +342,16 @@
       <form class="login-form" [formGroup]="aFormGroup" (ngSubmit)="guardar()">
         <input type="text" placeholder="Usuario" formControlName="usuario"/>
         <input type="password" placeholder="Contraseña" formControlName="password"/>
-        <ngx-recaptcha2 #captchaElem
+        <!-- <ngx-recaptcha2 #captchaElem
         [siteKey]="siteKey"
         formControlName="recaptcha">
-      </ngx-recaptcha2>
+      </ngx-recaptcha2> -->
         <button type="submit">login</button>
       </form>
     </div>
   </div>
+  <strong>Este es el token generado por JWT</strong>
+ <p>{{TokenGenerado}}</p>
+
 
 <router-outlet></router-outlet>
